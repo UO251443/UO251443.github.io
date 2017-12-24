@@ -44,11 +44,52 @@ var ControlesLayer = cc.Layer.extend({
              onKeyPressed: this.procesarKeyDown
         }, this)
 
+        cc.eventManager.addListener({
+            event: cc.EventListener.TOUCH_ONE_BY_ONE,
+            swallowTouches: true,
+            onTouchBegan: this.procesarTouch
+        }, this);
+
         this.scheduleUpdate();
         return true;
     },
     update:function (dt) {
 
+    },
+    procesarTouch:function(touch,event){
+        var instancia = event.getCurrentTarget();
+
+        var x = touch.getLocationX();
+        var y = touch.getLocationY();
+
+        //SALTO
+        var areaBoton = instancia.spriteBotonSaltar.getBoundingBox();
+
+        if (cc.rectContainsPoint(areaBoton,
+            cc.p(x, y) )){
+            var gameLayer = instancia.getParent().getChildByTag(idCapaJuego);
+            gameLayer.jugador.saltar();
+        }
+
+        //IZQUIERDA
+        areaBoton = instancia.spriteBotonIzqda.getBoundingBox();
+
+        if (cc.rectContainsPoint(areaBoton,
+             cc.p(x, y) )){
+             var gameLayer = instancia.getParent().getChildByTag(idCapaJuego);
+             gameLayer.jugador.moverIzqda();
+        }
+
+        //DERECHA
+        areaBoton = instancia.spriteBotonDcha.getBoundingBox();
+
+        if (cc.rectContainsPoint(areaBoton,
+             cc.p(x, y) )){
+             var gameLayer = instancia.getParent().getChildByTag(idCapaJuego);
+             gameLayer.jugador.moverDcha();
+        }
+
+        return true;
     },
     procesarMouseDown:function(event){
         var instancia = event.getCurrentTarget();
